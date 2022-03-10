@@ -1,5 +1,9 @@
 #include "DetectCurrentFluctuation.h"
 
+int minValues[MAX_NUMBER_OF_READINGS] = {0};
+int maxValues[MAX_NUMBER_OF_READINGS] = {0};
+int countValues[MAX_NUMBER_OF_READINGS] = {0};
+
 /* Comparator Function for qsort */
 int compareGivenInputs (const void * firstInput, const void * secondInput) {
     return ( *(int*)firstInput - *(int*)secondInput );
