@@ -67,7 +67,7 @@ void formatAndPrintToConsole(int NoOfRanges) {
 int Capture_and_Print_Current_values(int *currentReadings, int NumberOfSamples)
 {
     int *sortedInputArray = provideSortedArray(currentReadings,NumberOfSamples);
-    int *countOfReadings = provideCountOfDistinctElementsInArray(currentReadings,NumberOfSamples);
+    int *countOfReadings = provideCountOfDistinctElementsInArray(sortedInputArray,NumberOfSamples);
     int NoOfRanges = findAndProvideRangeCount(countOfReadings);
     (void)formatAndPrintToConsole(NoOfRanges);
     return NoOfRanges;
