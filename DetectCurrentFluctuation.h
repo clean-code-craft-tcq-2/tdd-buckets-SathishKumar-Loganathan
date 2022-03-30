@@ -1,6 +1,7 @@
 #include <stdio.h>      /* printf */
 #include <stdlib.h>     /* qsort */
 #include <math.h>       /* round */
+#include <stdbool.h>    /* boolean support */
 
 #define MAX_NUMBER_OF_READINGS 50
 
