@@ -3,6 +3,7 @@
 int minValues[MAX_NUMBER_OF_READINGS] = {0};
 int maxValues[MAX_NUMBER_OF_READINGS] = {0};
 int countValues[MAX_NUMBER_OF_READINGS] = {0};
+int *digitalArray,*arrayToStoreCount;
 
 /* Comparator Function for qsort */
 int compareGivenInputs (const void * firstInput, const void * secondInput) {
@@ -14,9 +15,13 @@ int* provideSortedArray(int *currentReadings, int NumberOfSamples) {
     return currentReadings;
 }
 
+/* Returns Digital value (Range: 0A to 10A) for the input 12bit analog value */
+int PerformADC_12bit_max10Amps(int analogValue) {
+    return (analogValue * 10)/4094;
+}
+
 /* Returns an array with Count of Elements provided in input array*/
 int* provideCountOfDistinctElementsInArray(int *ArrayElements, int sizeOfArray) {
-    int *arrayToStoreCount;
     arrayToStoreCount = (int*)calloc(MAX_NUMBER_OF_READINGS, sizeof(int));
     
     for(int i=0; i<sizeOfArray; i++)
@@ -67,12 +72,25 @@ void formatAndPrintToConsole(int NoOfRanges) {
     }
 }
 
+int* analogToDigitalConverter(int *analogArray, int sizeOfAnalogArray) {
+    int loopCounter;
+    digitalArray = (int*)calloc(sizeOfAnalogArray, sizeof(int));
+    for(loopCounter=0; loopCounter < sizeOfAnalogArray; loopCounter++)
+    {
+        if(analogArray[loopCounter] != 4095) //Hey its an Error.. Let's ignore  it!!
+            digitalArray[loopCounter] = round(PerformADC_12bit_max10Amps(analogArray[loopCounter]));
+    }
+    return digitalArray;
+}
+
 /* CoOrdinator function that uses other helper functions to do the job */
-int Capture_and_Print_Current_values(int *currentReadings, int NumberOfSamples)
-{
-    int *sortedInputArray = provideSortedArray(currentReadings,NumberOfSamples);
-    int *countOfReadings = provideCountOfDistinctElementsInArray(sortedInputArray,NumberOfSamples);
+int Capture_and_Print_Current_values(int *inputAnalogReadings, int NumberOfSamples) {
+    int *digitalConvertedArray = analogToDigitalConverter(inputAnalogReadings,NumberOfSamples);
+    int *sortedInputArray = provideSortedArray(digitalConvertedArray,NumberOfSamples);
+    int *countOfReadings = provideCountOfElementsInArray(digitalConvertedArray,NumberOfSamples);
     int NoOfRanges = findAndProvideRangeCount(countOfReadings);
     (void)formatAndPrintToConsole(NoOfRanges);
+    free(digitalArray);
+    free(arrayToStoreCount);
     return NoOfRanges;
 }
