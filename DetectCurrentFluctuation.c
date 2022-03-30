@@ -87,7 +87,7 @@ int* analogToDigitalConverter(int *analogArray, int sizeOfAnalogArray) {
 int Capture_and_Print_Current_values(int *inputAnalogReadings, int NumberOfSamples) {
     int *digitalConvertedArray = analogToDigitalConverter(inputAnalogReadings,NumberOfSamples);
     int *sortedInputArray = provideSortedArray(digitalConvertedArray,NumberOfSamples);
-    int *countOfReadings = provideCountOfElementsInArray(digitalConvertedArray,NumberOfSamples);
+    int *countOfReadings = provideCountOfDistinctElementsInArray(sortedInputArray,NumberOfSamples);
     int NoOfRanges = findAndProvideRangeCount(countOfReadings);
     (void)formatAndPrintToConsole(NoOfRanges);
     free(digitalArray);
