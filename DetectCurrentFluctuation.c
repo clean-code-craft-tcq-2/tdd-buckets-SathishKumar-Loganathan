@@ -83,14 +83,26 @@ int* analogToDigitalConverter(int *analogArray, int sizeOfAnalogArray) {
     return digitalArray;
 }
 
+bool isInputValid(int *inputAnalogReadings, int NumberOfSamples) {
+    if((inputAnalogReadings == NULL) || (NumberOfSamples <= 0))
+        return 0;
+    else if((inputAnalogReadings[0] >= 4095) && (NumberOfSamples == 1))
+        return 0;
+    else
+        return 1;
+}
+
 /* CoOrdinator function that uses other helper functions to do the job */
 int Capture_and_Print_Current_values(int *inputAnalogReadings, int NumberOfSamples) {
-    int *digitalConvertedArray = analogToDigitalConverter(inputAnalogReadings,NumberOfSamples);
-    int *sortedInputArray = provideSortedArray(digitalConvertedArray,NumberOfSamples);
-    int *countOfReadings = provideCountOfDistinctElementsInArray(sortedInputArray,NumberOfSamples);
-    int NoOfRanges = findAndProvideRangeCount(countOfReadings);
-    (void)formatAndPrintToConsole(NoOfRanges);
-    free(digitalArray);
-    free(arrayToStoreCount);
-    return NoOfRanges;
+    if(isInputValid(inputAnalogReadings,NumberOfSamples)) {
+        int *digitalConvertedArray = analogToDigitalConverter(inputAnalogReadings,NumberOfSamples);
+        int *sortedInputArray = provideSortedArray(digitalConvertedArray,NumberOfSamples);
+        int *countOfReadings = provideCountOfDistinctElementsInArray(sortedInputArray,NumberOfSamples);
+        int NoOfRanges = findAndProvideRangeCount(countOfReadings);
+        (void)formatAndPrintToConsole(NoOfRanges);
+        free(digitalArray);
+        free(arrayToStoreCount);
+        return NoOfRanges;
+    }
+    return 0;
 }
